@@ -446,6 +446,13 @@
   .fade-in.d2 { animation-delay: 0.15s; }
   .fade-in.d3 { animation-delay: 0.25s; }
   .fade-in.d4 { animation-delay: 0.35s; }
+
+  .load-state {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    color: var(--fg-muted);
+  }
+  .load-state.error { color: var(--accent-3); }
 </style>
 </head>
 <body>
@@ -528,135 +535,27 @@
       <section id="experience">
         <span class="eyebrow">experience.log</span>
         <h2>Recent activity</h2>
-        <div class="experience-grid">
-          <div class="commit card card-hover">
-            <div class="commit-marker">● commit — HEAD</div>
-            <div class="commit-head">
-              <span class="commit-title">Technical Assistant</span>
-              <span class="commit-date">Nov 2025 – Present</span>
-            </div>
-            <div class="commit-org">Asia Pacific University</div>
-            <ul>
-              <li>Maintain and monitor campus IT facilities for high availability and performance</li>
-              <li>Deliver frontline technical support across hardware, software, and network issues</li>
-              <li>Manage IT asset inventory, keeping equipment organised and ready to deploy</li>
-            </ul>
-          </div>
-          <div class="commit card card-hover">
-            <div class="commit-marker">● commit</div>
-            <div class="commit-head">
-              <span class="commit-title">Great Malaysia AI Hackathon — Language Learning System</span>
-              <span class="commit-date">2025</span>
-            </div>
-            <div class="commit-org">Team project</div>
-            <ul>
-              <li>Built a language-learning web app powered by AWS Bedrock for AI-assisted instruction</li>
-              <li>Designed, built, and presented a working prototype within the competition timeframe</li>
-            </ul>
-          </div>
-          <div class="commit card card-hover">
-            <div class="commit-marker">● commit — initial</div>
-            <div class="commit-head">
-              <span class="commit-title">Started Diploma in ICT, Software Engineering</span>
-              <span class="commit-date">Sep 2024</span>
-            </div>
-            <div class="commit-org">Asia Pacific University</div>
-            <ul>
-              <li>Specialised in software engineering; current CGPA 3.88/4.0</li>
-            </ul>
-          </div>
+        <div class="experience-grid" id="experience-grid" aria-live="polite">
+          <p class="load-state">Loading…</p>
         </div>
       </section>
 
       <section id="skills">
         <span class="eyebrow">skills.json</span>
         <h2>Stack</h2>
-        <div class="skill-groups">
-          <div class="skill-group card card-hover">
-            <div class="eyebrow">Languages</div>
-            <div class="chip-row">
-              <span class="chip">JavaScript</span>
-              <span class="chip">HTML &amp; CSS</span>
-              <span class="chip">Python</span>
-              <span class="chip">Java</span>
-            </div>
-          </div>
-          <div class="skill-group card card-hover">
-            <div class="eyebrow">Backend &amp; Database</div>
-            <div class="chip-row">
-              <span class="chip">MySQL</span>
-            </div>
-          </div>
-          <div class="skill-group card card-hover">
-            <div class="eyebrow">Tools &amp; Platforms</div>
-            <div class="chip-row">
-              <span class="chip">Git</span>
-              <span class="chip">XAMPP</span>
-              <span class="chip">Kali Linux</span>
-              <span class="chip">VMware</span>
-              <span class="chip">Joget</span>
-              <span class="chip">Botpress</span>
-            </div>
-          </div>
-          <div class="skill-group card card-hover">
-            <div class="eyebrow">Design</div>
-            <div class="chip-row">
-              <span class="chip">Figma</span>
-              <span class="chip">Canva</span>
-              <span class="chip">PowerPoint</span>
-              <span class="chip">CapCut</span>
-            </div>
-          </div>
+        <div class="skill-groups" id="skill-groups" aria-live="polite">
+          <p class="load-state">Loading…</p>
         </div>
       </section>
 
       <section id="projects">
         <span class="eyebrow">projects/</span>
         <h2>Selected work</h2>
-        <div class="project-grid">
-          <div class="project-card card-hover">
-            <div class="file-line"><span class="icon">▸</span> hisign/</div>
-            <h3>HiSign</h3>
-            <div class="tagline">Real-time sign language learning platform</div>
-            <p>
-              Full-stack e-learning platform for sign language — lessons, quizzes, leaderboards, and
-              streaks across learner, instructor, and admin portals. A Flask service runs an LSTM model
-              over MediaPipe hand-landmark data to recognise signs live and translate them in real time.
-            </p>
-            <div class="chip-row">
-              <span class="chip">PHP</span>
-              <span class="chip">MySQL</span>
-              <span class="chip">Python</span>
-              <span class="chip">Flask</span>
-              <span class="chip">LSTM</span>
-              <span class="chip">MediaPipe</span>
-            </div>
-          </div>
-          <div class="project-card card-hover">
-            <div class="file-line"><span class="icon">▸</span> lion-dance-chatbot/</div>
-            <h3>Lion Dance Drum Chatbot</h3>
-            <div class="tagline">Conversational AI for cultural learning</div>
-            <p>
-              A Botpress chatbot that teaches lion dance drumming technique and cultural context,
-              guiding learners through structured conversation flows instead of static lesson pages.
-            </p>
-            <div class="chip-row">
-              <span class="chip">Botpress</span>
-              <span class="chip">Conversation design</span>
-            </div>
-          </div>
+        <div class="project-grid" id="project-grid" aria-live="polite">
+          <p class="load-state">Loading…</p>
         </div>
 
-        <div class="more-projects">
-          <div class="more-row">
-            <span class="name">green-reward-system/</span>
-            <span class="desc">Full-stack sustainability rewards platform — REST APIs for auth, points, and rewards, with real-time activity notifications. PHP · MySQL · XAMPP</span>
-          </div>
-          <div class="more-row">
-            <span class="name">language-learning-hackathon/</span>
-            <span class="desc">AI-assisted language learning web app built at the Great Malaysia AI Hackathon. AWS Bedrock</span>
-          </div>
-        </div>
+        <div class="more-projects" id="more-projects"></div>
       </section>
 
       <section id="contact">
@@ -719,6 +618,120 @@
       tick();
       setInterval(tick, 30000);
     }
+  })();
+</script>
+
+<script>
+  (function () {
+    var SUPABASE_URL = 'https://gconhxjifoculzsbztsg.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdjb25oeGppZm9jdWx6c2J6dHNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwMjg1NzcsImV4cCI6MjEwMjYwNDU3N30.VEmTDeMLtajIFxmIGut__XjaeiqFr89tOdI4zm1Y1D8';
+
+    function fetchTable(table, query) {
+      return fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + query, {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + SUPABASE_ANON_KEY
+        }
+      }).then(function (res) {
+        if (!res.ok) throw new Error(table + ' request failed: ' + res.status);
+        return res.json();
+      });
+    }
+
+    function esc(str) {
+      var div = document.createElement('div');
+      div.textContent = str == null ? '' : str;
+      return div.innerHTML;
+    }
+
+    function chipRow(items) {
+      return '<div class="chip-row">' + items.map(function (t) {
+        return '<span class="chip">' + esc(t) + '</span>';
+      }).join('') + '</div>';
+    }
+
+    function showError(container, label) {
+      container.innerHTML = '<p class="load-state error">Couldn\'t load ' + label + ' — try refreshing.</p>';
+    }
+
+    // ---- Experience ----
+    fetchTable('experience', 'select=*&order=sort_order.asc')
+      .then(function (rows) {
+        var el = document.getElementById('experience-grid');
+        el.innerHTML = rows.map(function (row, i) {
+          var marker = i === 0 ? '● commit — HEAD' : (i === rows.length - 1 ? '● commit — initial' : '● commit');
+          var org = row.org ? '<div class="commit-org">' + esc(row.org) + '</div>' : '';
+          var bullets = (row.bullets || []).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('');
+          return (
+            '<div class="commit card card-hover">' +
+              '<div class="commit-marker">' + marker + '</div>' +
+              '<div class="commit-head">' +
+                '<span class="commit-title">' + esc(row.title) + '</span>' +
+                '<span class="commit-date">' + esc(row.date_label) + '</span>' +
+              '</div>' +
+              org +
+              '<ul>' + bullets + '</ul>' +
+            '</div>'
+          );
+        }).join('');
+      })
+      .catch(function () { showError(document.getElementById('experience-grid'), 'experience'); });
+
+    // ---- Skills ----
+    fetchTable('skills', 'select=*&order=sort_order.asc')
+      .then(function (rows) {
+        var groups = [];
+        var byCategory = {};
+        rows.forEach(function (row) {
+          if (!byCategory[row.category]) {
+            byCategory[row.category] = [];
+            groups.push(row.category);
+          }
+          byCategory[row.category].push(row.name);
+        });
+        var el = document.getElementById('skill-groups');
+        el.innerHTML = groups.map(function (cat) {
+          return (
+            '<div class="skill-group card card-hover">' +
+              '<div class="eyebrow">' + esc(cat) + '</div>' +
+              chipRow(byCategory[cat]) +
+            '</div>'
+          );
+        }).join('');
+      })
+      .catch(function () { showError(document.getElementById('skill-groups'), 'skills'); });
+
+    // ---- Projects ----
+    fetchTable('projects', 'select=*&order=sort_order.asc')
+      .then(function (rows) {
+        var featured = rows.filter(function (r) { return r.featured; });
+        var rest = rows.filter(function (r) { return !r.featured; });
+
+        var grid = document.getElementById('project-grid');
+        grid.innerHTML = featured.map(function (row) {
+          return (
+            '<div class="project-card card-hover">' +
+              '<div class="file-line"><span class="icon">▸</span> ' + esc(row.slug) + '/</div>' +
+              '<h3>' + esc(row.title) + '</h3>' +
+              '<div class="tagline">' + esc(row.tagline) + '</div>' +
+              '<p>' + esc(row.description) + '</p>' +
+              chipRow(row.tags || []) +
+            '</div>'
+          );
+        }).join('');
+
+        var more = document.getElementById('more-projects');
+        more.innerHTML = rest.map(function (row) {
+          var tagStr = (row.tags || []).join(' · ');
+          return (
+            '<div class="more-row">' +
+              '<span class="name">' + esc(row.slug) + '/</span>' +
+              '<span class="desc">' + esc(row.description) + (tagStr ? ' ' + esc(tagStr) : '') + '</span>' +
+            '</div>'
+          );
+        }).join('');
+      })
+      .catch(function () { showError(document.getElementById('project-grid'), 'projects'); });
   })();
 </script>
 </body>
