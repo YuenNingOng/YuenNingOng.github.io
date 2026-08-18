@@ -212,6 +212,26 @@
   }
   .eyebrow::before { content: ""; width: 14px; height: 1px; background: var(--accent-2); }
 
+  /* ---------- Card + hover ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.15rem 1.3rem;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+  .card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .card-hover:hover, .card-hover:focus-within {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 16px 34px -14px var(--shadow), 0 0 0 1px var(--accent), 0 0 28px var(--accent-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover:hover, .card-hover:focus-within { transform: none; }
+  }
+
   h1, h2, h3 { text-wrap: balance; margin: 0; }
   h1 { font-family: var(--font-mono); font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.01em; }
   h2 { font-family: var(--font-mono); font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 1.6rem; }
@@ -303,25 +323,23 @@
     color: var(--accent-2);
   }
 
-  .about-copy p { margin: 0 0 1.1rem; max-width: 58ch; }
-  .about-copy .edu-item { margin-bottom: 1.3rem; }
+  .about-copy p { margin: 1.3rem 0 0; max-width: 58ch; }
+  .edu-cards { display: flex; flex-direction: column; gap: 0.9rem; }
   .about-copy .edu-item h3 { margin-bottom: 0.2rem; }
   .about-copy .edu-item .meta { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--fg-muted); }
 
-  /* ---------- Experience timeline ---------- */
-  .timeline { position: relative; padding-left: 1.6rem; }
-  .timeline::before {
-    content: "";
-    position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px;
-    background: var(--border);
+  /* ---------- Experience cards ---------- */
+  .experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
   }
-  .commit { position: relative; padding-bottom: 2.1rem; }
-  .commit:last-child { padding-bottom: 0; }
-  .commit::before {
-    content: "";
-    position: absolute; left: -1.6rem; top: 5px;
-    width: 9px; height: 9px; border-radius: 50%;
-    background: var(--bg); border: 2px solid var(--accent);
+  .commit { display: flex; flex-direction: column; }
+  .commit-marker {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    color: var(--accent);
+    margin-bottom: 0.6rem;
   }
   .commit-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; margin-bottom: 0.35rem; }
   .commit-title { font-weight: 600; font-size: var(--fs-h3); }
@@ -333,6 +351,7 @@
   /* ---------- Skills ---------- */
   .skill-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2.5rem; }
   @media (max-width: 700px) { .skill-groups { grid-template-columns: 1fr; } }
+  .skill-group.card { display: flex; flex-direction: column; gap: 0.2rem; }
   .skill-group .eyebrow { color: var(--fg-muted); }
   .skill-group .eyebrow::before { background: var(--fg-muted); }
   .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -473,13 +492,15 @@
         <h2>Background</h2>
         <div class="about-grid">
           <div class="about-copy">
-            <div class="edu-item">
-              <h3>Diploma in ICT, Software Engineering</h3>
-              <div class="meta">Asia Pacific University, Kuala Lumpur · Sep 2024 – Present · CGPA 3.88/4.0</div>
-            </div>
-            <div class="edu-item">
-              <h3>Sijil Pelajaran Malaysia (SPM)</h3>
-              <div class="meta">SMK Tun Perak, Rawang · 8 A's (1A+, 3A, 4A-)</div>
+            <div class="edu-cards">
+              <div class="edu-item card card-hover">
+                <h3>Diploma in ICT, Software Engineering</h3>
+                <div class="meta">Asia Pacific University, Kuala Lumpur · Sep 2024 – Present · CGPA 3.88/4.0</div>
+              </div>
+              <div class="edu-item card card-hover">
+                <h3>Sijil Pelajaran Malaysia (SPM)</h3>
+                <div class="meta">SMK Tun Perak, Rawang · 8 A's (1A+, 3A, 4A-)</div>
+              </div>
             </div>
             <p>
               Outside of coursework I gravitate toward hands-on builds — hackathons, self-taught tools,
@@ -487,7 +508,7 @@
               you can see it running.
             </p>
           </div>
-          <div class="kv-block">
+          <div class="kv-block card-hover">
             <div class="brace">{</div>
             <div class="kv-row"><span class="kv-key">"role"</span><span class="kv-val">: "Technical Assistant @ APU",</span></div>
             <div class="kv-row"><span class="kv-key">"focus"</span><span class="kv-val">: ["software dev", "AI", "cloud"],</span></div>
@@ -507,8 +528,9 @@
       <section id="experience">
         <span class="eyebrow">experience.log</span>
         <h2>Recent activity</h2>
-        <div class="timeline">
-          <div class="commit">
+        <div class="experience-grid">
+          <div class="commit card card-hover">
+            <div class="commit-marker">● commit — HEAD</div>
             <div class="commit-head">
               <span class="commit-title">Technical Assistant</span>
               <span class="commit-date">Nov 2025 – Present</span>
@@ -520,7 +542,8 @@
               <li>Manage IT asset inventory, keeping equipment organised and ready to deploy</li>
             </ul>
           </div>
-          <div class="commit">
+          <div class="commit card card-hover">
+            <div class="commit-marker">● commit</div>
             <div class="commit-head">
               <span class="commit-title">Great Malaysia AI Hackathon — Language Learning System</span>
               <span class="commit-date">2025</span>
@@ -531,7 +554,8 @@
               <li>Designed, built, and presented a working prototype within the competition timeframe</li>
             </ul>
           </div>
-          <div class="commit">
+          <div class="commit card card-hover">
+            <div class="commit-marker">● commit — initial</div>
             <div class="commit-head">
               <span class="commit-title">Started Diploma in ICT, Software Engineering</span>
               <span class="commit-date">Sep 2024</span>
@@ -548,7 +572,7 @@
         <span class="eyebrow">skills.json</span>
         <h2>Stack</h2>
         <div class="skill-groups">
-          <div class="skill-group">
+          <div class="skill-group card card-hover">
             <div class="eyebrow">Languages</div>
             <div class="chip-row">
               <span class="chip">JavaScript</span>
@@ -557,13 +581,13 @@
               <span class="chip">Java</span>
             </div>
           </div>
-          <div class="skill-group">
+          <div class="skill-group card card-hover">
             <div class="eyebrow">Backend &amp; Database</div>
             <div class="chip-row">
               <span class="chip">MySQL</span>
             </div>
           </div>
-          <div class="skill-group">
+          <div class="skill-group card card-hover">
             <div class="eyebrow">Tools &amp; Platforms</div>
             <div class="chip-row">
               <span class="chip">Git</span>
@@ -574,7 +598,7 @@
               <span class="chip">Botpress</span>
             </div>
           </div>
-          <div class="skill-group">
+          <div class="skill-group card card-hover">
             <div class="eyebrow">Design</div>
             <div class="chip-row">
               <span class="chip">Figma</span>
@@ -590,7 +614,7 @@
         <span class="eyebrow">projects/</span>
         <h2>Selected work</h2>
         <div class="project-grid">
-          <div class="project-card">
+          <div class="project-card card-hover">
             <div class="file-line"><span class="icon">▸</span> hisign/</div>
             <h3>HiSign</h3>
             <div class="tagline">Real-time sign language learning platform</div>
@@ -608,7 +632,7 @@
               <span class="chip">MediaPipe</span>
             </div>
           </div>
-          <div class="project-card">
+          <div class="project-card card-hover">
             <div class="file-line"><span class="icon">▸</span> lion-dance-chatbot/</div>
             <h3>Lion Dance Drum Chatbot</h3>
             <div class="tagline">Conversational AI for cultural learning</div>
