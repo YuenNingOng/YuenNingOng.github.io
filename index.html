@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ong Yuen Ning — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ong Yuen Ning — Software Engineering student, Asia Pacific University. Software development, AI, and cloud.">
+<style>
+  :root {
+    --bg: #F3F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E8ECF1;
+    --border: #D7DEE6;
+    --fg: #17212C;
+    --fg-muted: #56677A;
+    --accent: #F5A623;
+    --accent-strong: #8A5A00;
+    --accent-soft: rgba(245,166,35,0.14);
+    --accent-2: #1D8A97;
+    --accent-2-soft: rgba(29,138,151,0.12);
+    --accent-3: #C23B36;
+    --shadow: rgba(23,33,44,0.10);
+
+    --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", Consolas, "Roboto Mono", monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --fs-h1: clamp(2.1rem, 4.5vw + 1rem, 3.4rem);
+    --fs-h2: clamp(1.35rem, 1.6vw + 1rem, 1.75rem);
+    --fs-h3: 1.05rem;
+    --fs-body: 1rem;
+    --fs-small: 0.875rem;
+    --fs-micro: 0.75rem;
+
+    --sidebar-w: 220px;
+    --topbar-h: 52px;
+    --statusbar-h: 34px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0A0F16;
+      --surface: #121A24;
+      --surface-2: #182230;
+      --border: #26333F;
+      --fg: #E7EDF3;
+      --fg-muted: #8CA0B3;
+      --accent: #F5A623;
+      --accent-strong: #F5A623;
+      --accent-soft: rgba(245,166,35,0.16);
+      --accent-2: #5FD3E0;
+      --accent-2-soft: rgba(95,211,224,0.14);
+      --accent-3: #FF6B62;
+      --shadow: rgba(0,0,0,0.4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0A0F16;
+    --surface: #121A24;
+    --surface-2: #182230;
+    --border: #26333F;
+    --fg: #E7EDF3;
+    --fg-muted: #8CA0B3;
+    --accent: #F5A623;
+    --accent-strong: #F5A623;
+    --accent-soft: rgba(245,166,35,0.16);
+    --accent-2: #5FD3E0;
+    --accent-2-soft: rgba(95,211,224,0.14);
+    --accent-3: #FF6B62;
+    --shadow: rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--topbar-h) + 16px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  ::selection { background: var(--accent-soft); color: var(--fg); }
+
+  code, .mono { font-family: var(--font-mono); }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: var(--topbar-h);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0 1.25rem;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .path {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    color: var(--fg-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .path b { color: var(--fg); font-weight: 600; }
+  .path .sep { color: var(--border); margin: 0 0.35rem; }
+
+  /* ---------- Layout ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- File nav (sidebar on desktop, strip on mobile) ---------- */
+  .filenav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 1.5rem 0.75rem;
+    position: sticky;
+    top: var(--topbar-h);
+    align-self: start;
+    height: calc(100vh - var(--topbar-h));
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 860px) {
+    .filenav {
+      position: sticky;
+      flex-direction: row;
+      height: auto;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 0.9rem;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(8px);
+      gap: 0.4rem;
+    }
+  }
+
+  .filenav button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    color: var(--fg-muted);
+    padding: 0.5rem 0.65rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    border-left: 2px solid transparent;
+  }
+  @media (max-width: 860px) {
+    .filenav button { border-left: none; border-bottom: 2px solid transparent; padding: 0.4rem 0.5rem; }
+  }
+  .filenav button:hover { color: var(--fg); background: var(--surface-2); }
+  .filenav button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 1px; }
+  .filenav button.active {
+    color: var(--fg);
+    background: var(--accent-soft);
+    border-left-color: var(--accent);
+  }
+  @media (max-width: 860px) {
+    .filenav button.active { border-left-color: transparent; border-bottom-color: var(--accent); }
+  }
+  .filenav .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--fg-muted); flex: none; }
+  .filenav button.active .dot { background: var(--accent); }
+
+  main { min-width: 0; padding-bottom: 3rem; }
+
+  section {
+    padding: 3.2rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow::before { content: ""; width: 14px; height: 1px; background: var(--accent-2); }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  h1 { font-family: var(--font-mono); font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.01em; }
+  h2 { font-family: var(--font-mono); font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 1.6rem; }
+  h3 { font-size: var(--fs-h3); font-weight: 600; }
+
+  p { max-width: 62ch; color: var(--fg-muted); }
+
+  /* ---------- Hero ---------- */
+  #readme { padding-top: 3.5rem; }
+  .hero-top {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.8rem 1rem; margin-bottom: 0.6rem;
+  }
+  .hero-role {
+    font-family: var(--font-mono);
+    color: var(--fg-muted);
+    font-size: var(--fs-small);
+  }
+  .hero-role .kw { color: var(--accent-2); }
+  .hero-lede { font-size: 1.05rem; margin-top: 1.1rem; color: var(--fg-muted); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 1.4rem; }
+  .badge {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    padding: 0.32rem 0.6rem;
+    border-radius: 5px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .badge.live { color: var(--accent-strong); border-color: var(--accent-soft); }
+  .badge.live .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .badge.live .pulse { animation: none; } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.9rem; }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    text-decoration: none;
+    padding: 0.65rem 1.1rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #1A1200; font-weight: 600; }
+  .btn-primary:hover { background: color-mix(in srgb, var(--accent) 85%, black 10%); }
+  .btn-ghost { color: var(--fg); background: var(--surface); }
+  .btn-ghost:hover { border-color: var(--accent-2); color: var(--accent-2); }
+
+  /* ---------- About ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; }
+  @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .kv-block {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.3rem;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+  .kv-block .brace { color: var(--fg-muted); }
+  .kv-row { display: flex; gap: 0.5rem; padding: 0.28rem 0 0.28rem 1rem; }
+  .kv-key { color: var(--accent-2); flex: none; }
+  .kv-val { color: var(--fg); }
+  .kv-val .sub { color: var(--fg-muted); }
+
+  .lang-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-left: 1rem; margin-top: 0.2rem; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    padding: 0.22rem 0.55rem;
+    border-radius: 5px;
+    background: var(--accent-2-soft);
+    color: var(--accent-2);
+  }
+
+  .about-copy p { margin: 0 0 1.1rem; max-width: 58ch; }
+  .about-copy .edu-item { margin-bottom: 1.3rem; }
+  .about-copy .edu-item h3 { margin-bottom: 0.2rem; }
+  .about-copy .edu-item .meta { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--fg-muted); }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline { position: relative; padding-left: 1.6rem; }
+  .timeline::before {
+    content: "";
+    position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px;
+    background: var(--border);
+  }
+  .commit { position: relative; padding-bottom: 2.1rem; }
+  .commit:last-child { padding-bottom: 0; }
+  .commit::before {
+    content: "";
+    position: absolute; left: -1.6rem; top: 5px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent);
+  }
+  .commit-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; margin-bottom: 0.35rem; }
+  .commit-title { font-weight: 600; font-size: var(--fs-h3); }
+  .commit-date { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--fg-muted); }
+  .commit-org { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--accent-2); margin-bottom: 0.55rem; }
+  .commit ul { margin: 0; padding-left: 1.1rem; color: var(--fg-muted); }
+  .commit li { margin-bottom: 0.3rem; max-width: 60ch; }
+
+  /* ---------- Skills ---------- */
+  .skill-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2.5rem; }
+  @media (max-width: 700px) { .skill-groups { grid-template-columns: 1fr; } }
+  .skill-group .eyebrow { color: var(--fg-muted); }
+  .skill-group .eyebrow::before { background: var(--fg-muted); }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    padding: 0.4rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
+  }
+
+  /* ---------- Projects ---------- */
+  .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  @media (max-width: 760px) { .project-grid { grid-template-columns: 1fr; } }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .project-card .file-line {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    color: var(--fg-muted);
+  }
+  .project-card .file-line .icon { color: var(--accent); }
+  .project-card h3 { font-size: 1.15rem; }
+  .project-card .tagline { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--accent-2); }
+  .project-card p { max-width: none; font-size: var(--fs-small); margin: 0; }
+  .project-card .chip-row { margin-top: auto; padding-top: 0.4rem; }
+  .project-card .chip { font-size: var(--fs-micro); padding: 0.28rem 0.55rem; background: var(--surface-2); }
+
+  .more-projects { margin-top: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; }
+  .more-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    padding: 0.85rem 0; border-top: 1px solid var(--border);
+  }
+  .more-row .name { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--fg); }
+  .more-row .desc { color: var(--fg-muted); font-size: var(--fs-small); max-width: 44ch; }
+  @media (max-width: 700px) { .more-row { flex-direction: column; gap: 0.3rem; } }
+
+  /* ---------- Contact ---------- */
+  #contact { padding-bottom: 5rem; }
+  .term {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.3rem;
+    box-shadow: 0 1px 2px var(--shadow);
+    max-width: 46rem;
+  }
+  .term .line { display: flex; gap: 0.6rem; padding: 0.2rem 0; }
+  .term .prompt { color: var(--accent-2); }
+  .term a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
+  .term a:hover { text-decoration-color: var(--accent); color: var(--accent-strong); }
+  .term .comment { color: var(--fg-muted); }
+
+  /* ---------- Status bar ---------- */
+  .statusbar {
+    position: sticky;
+    bottom: 0;
+    height: var(--statusbar-h);
+    background: var(--accent);
+    color: #1A1200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    z-index: 30;
+  }
+  .statusbar .left, .statusbar .right { display: flex; align-items: center; gap: 1rem; }
+  .statusbar .sep { opacity: 0.5; }
+
+  @media (max-width: 500px) {
+    .statusbar .hide-sm { display: none; }
+  }
+
+  .fade-in { opacity: 0; transform: translateY(8px); animation: fadeIn 0.6s ease forwards; }
+  @media (prefers-reduced-motion: reduce) { .fade-in { opacity: 1; transform: none; animation: none; } }
+  @keyframes fadeIn { to { opacity: 1; transform: none; } }
+  .fade-in.d1 { animation-delay: 0.05s; }
+  .fade-in.d2 { animation-delay: 0.15s; }
+  .fade-in.d3 { animation-delay: 0.25s; }
+  .fade-in.d4 { animation-delay: 0.35s; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="path"><b>ong-yuen-ning</b><span class="sep">/</span>portfolio</div>
+  </header>
+
+  <div class="layout">
+    <nav class="filenav" aria-label="Sections">
+      <button data-target="readme"><span class="dot"></span>README.md</button>
+      <button data-target="about"><span class="dot"></span>about.md</button>
+      <button data-target="experience"><span class="dot"></span>experience.log</button>
+      <button data-target="skills"><span class="dot"></span>skills.json</button>
+      <button data-target="projects"><span class="dot"></span>projects/</button>
+      <button data-target="contact"><span class="dot"></span>contact.sh</button>
+    </nav>
+
+    <main>
+      <section id="readme">
+        <div class="hero-top fade-in">
+          <h1>Ong Yuen Ning</h1>
+        </div>
+        <p class="hero-role fade-in d1"><span class="kw">//</span> Diploma in ICT (Software Engineering) student, Asia Pacific University</p>
+        <p class="hero-lede fade-in d2">
+          Drawn to software development, AI, and cloud — built through coursework, hackathons, and
+          projects shipped outside of class. Currently a Technical Assistant at APU, keeping campus
+          systems running while finishing the diploma.
+        </p>
+        <div class="badges fade-in d3">
+          <span class="badge">Kuala Lumpur, MY</span>
+          <span class="badge">CGPA 3.88 / 4.0</span>
+          <span class="badge live"><span class="pulse"></span>Open to internship · Sep–Dec 2026</span>
+        </div>
+        <div class="cta-row fade-in d4">
+          <a class="btn btn-primary" href="mailto:ningyuen03@gmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/yuen-ning-ong-18ba55328" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </section>
+
+      <section id="about">
+        <span class="eyebrow">about.md</span>
+        <h2>Background</h2>
+        <div class="about-grid">
+          <div class="about-copy">
+            <div class="edu-item">
+              <h3>Diploma in ICT, Software Engineering</h3>
+              <div class="meta">Asia Pacific University, Kuala Lumpur · Sep 2024 – Present · CGPA 3.88/4.0</div>
+            </div>
+            <div class="edu-item">
+              <h3>Sijil Pelajaran Malaysia (SPM)</h3>
+              <div class="meta">SMK Tun Perak, Rawang · 8 A's (1A+, 3A, 4A-)</div>
+            </div>
+            <p>
+              Outside of coursework I gravitate toward hands-on builds — hackathons, self-taught tools,
+              and side projects — over sitting still with theory. I like the parts of software work where
+              you can see it running.
+            </p>
+          </div>
+          <div class="kv-block">
+            <div class="brace">{</div>
+            <div class="kv-row"><span class="kv-key">"role"</span><span class="kv-val">: "Technical Assistant @ APU",</span></div>
+            <div class="kv-row"><span class="kv-key">"focus"</span><span class="kv-val">: ["software dev", "AI", "cloud"],</span></div>
+            <div class="kv-row"><span class="kv-key">"languages"</span><span class="kv-val">: [</span></div>
+            <div class="lang-tags">
+              <span class="tag">Chinese (native)</span>
+              <span class="tag">English</span>
+              <span class="tag">Malay</span>
+              <span class="tag">Cantonese</span>
+            </div>
+            <div class="kv-row" style="padding-left:1rem;"><span class="kv-val">]</span></div>
+            <div class="brace">}</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience">
+        <span class="eyebrow">experience.log</span>
+        <h2>Recent activity</h2>
+        <div class="timeline">
+          <div class="commit">
+            <div class="commit-head">
+              <span class="commit-title">Technical Assistant</span>
+              <span class="commit-date">Nov 2025 – Present</span>
+            </div>
+            <div class="commit-org">Asia Pacific University</div>
+            <ul>
+              <li>Maintain and monitor campus IT facilities for high availability and performance</li>
+              <li>Deliver frontline technical support across hardware, software, and network issues</li>
+              <li>Manage IT asset inventory, keeping equipment organised and ready to deploy</li>
+            </ul>
+          </div>
+          <div class="commit">
+            <div class="commit-head">
+              <span class="commit-title">Great Malaysia AI Hackathon — Language Learning System</span>
+              <span class="commit-date">2025</span>
+            </div>
+            <div class="commit-org">Team project</div>
+            <ul>
+              <li>Built a language-learning web app powered by AWS Bedrock for AI-assisted instruction</li>
+              <li>Designed, built, and presented a working prototype within the competition timeframe</li>
+            </ul>
+          </div>
+          <div class="commit">
+            <div class="commit-head">
+              <span class="commit-title">Started Diploma in ICT, Software Engineering</span>
+              <span class="commit-date">Sep 2024</span>
+            </div>
+            <div class="commit-org">Asia Pacific University</div>
+            <ul>
+              <li>Specialised in software engineering; current CGPA 3.88/4.0</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills">
+        <span class="eyebrow">skills.json</span>
+        <h2>Stack</h2>
+        <div class="skill-groups">
+          <div class="skill-group">
+            <div class="eyebrow">Languages</div>
+            <div class="chip-row">
+              <span class="chip">JavaScript</span>
+              <span class="chip">HTML &amp; CSS</span>
+              <span class="chip">Python</span>
+              <span class="chip">Java</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="eyebrow">Backend &amp; Database</div>
+            <div class="chip-row">
+              <span class="chip">MySQL</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="eyebrow">Tools &amp; Platforms</div>
+            <div class="chip-row">
+              <span class="chip">Git</span>
+              <span class="chip">XAMPP</span>
+              <span class="chip">Kali Linux</span>
+              <span class="chip">VMware</span>
+              <span class="chip">Joget</span>
+              <span class="chip">Botpress</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="eyebrow">Design</div>
+            <div class="chip-row">
+              <span class="chip">Figma</span>
+              <span class="chip">Canva</span>
+              <span class="chip">PowerPoint</span>
+              <span class="chip">CapCut</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <span class="eyebrow">projects/</span>
+        <h2>Selected work</h2>
+        <div class="project-grid">
+          <div class="project-card">
+            <div class="file-line"><span class="icon">▸</span> hisign/</div>
+            <h3>HiSign</h3>
+            <div class="tagline">Real-time sign language learning platform</div>
+            <p>
+              Full-stack e-learning platform for sign language — lessons, quizzes, leaderboards, and
+              streaks across learner, instructor, and admin portals. A Flask service runs an LSTM model
+              over MediaPipe hand-landmark data to recognise signs live and translate them in real time.
+            </p>
+            <div class="chip-row">
+              <span class="chip">PHP</span>
+              <span class="chip">MySQL</span>
+              <span class="chip">Python</span>
+              <span class="chip">Flask</span>
+              <span class="chip">LSTM</span>
+              <span class="chip">MediaPipe</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="file-line"><span class="icon">▸</span> lion-dance-chatbot/</div>
+            <h3>Lion Dance Drum Chatbot</h3>
+            <div class="tagline">Conversational AI for cultural learning</div>
+            <p>
+              A Botpress chatbot that teaches lion dance drumming technique and cultural context,
+              guiding learners through structured conversation flows instead of static lesson pages.
+            </p>
+            <div class="chip-row">
+              <span class="chip">Botpress</span>
+              <span class="chip">Conversation design</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="more-projects">
+          <div class="more-row">
+            <span class="name">green-reward-system/</span>
+            <span class="desc">Full-stack sustainability rewards platform — REST APIs for auth, points, and rewards, with real-time activity notifications. PHP · MySQL · XAMPP</span>
+          </div>
+          <div class="more-row">
+            <span class="name">language-learning-hackathon/</span>
+            <span class="desc">AI-assisted language learning web app built at the Great Malaysia AI Hackathon. AWS Bedrock</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <span class="eyebrow">contact.sh</span>
+        <h2>Get in touch</h2>
+        <div class="term">
+          <div class="line"><span class="prompt">$</span><span class="comment"># based in Kuala Lumpur, Malaysia</span></div>
+          <div class="line"><span class="prompt">$</span>mailto <a href="mailto:ningyuen03@gmail.com">ningyuen03@gmail.com</a></div>
+          <div class="line"><span class="prompt">$</span>open <a href="https://www.linkedin.com/in/yuen-ning-ong-18ba55328" target="_blank" rel="noopener">linkedin.com/in/yuen-ning-ong-18ba55328</a></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="statusbar">
+    <div class="left">
+      <span>⎇ main</span>
+      <span class="sep hide-sm">|</span>
+      <span class="hide-sm">Kuala Lumpur, MY</span>
+    </div>
+    <div class="right">
+      <span id="clock" class="hide-sm"></span>
+      <span class="sep hide-sm">|</span>
+      <span>Open to internship</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var buttons = Array.prototype.slice.call(document.querySelectorAll('.filenav button'));
+    var sections = buttons.map(function (b) { return document.getElementById(b.dataset.target); });
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var el = document.getElementById(btn.dataset.target);
+        if (el) el.scrollIntoView({ block: 'start' });
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.id;
+          buttons.forEach(function (b) {
+            b.classList.toggle('active', b.dataset.target === id);
+          });
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+      sections.forEach(function (s) { if (s) observer.observe(s); });
+    }
+
+    var clock = document.getElementById('clock');
+    if (clock) {
+      var fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit'
+      });
+      function tick() { clock.textContent = 'KUL ' + fmt.format(new Date()); }
+      tick();
+      setInterval(tick, 30000);
+    }
+  })();
+</script>
+</body>
+</html>
