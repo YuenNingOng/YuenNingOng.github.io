@@ -26,15 +26,43 @@
     /* Paste the existing Supabase project URL and anon key here. The layout works immediately with the sample data below, and then automatically uses your three live tables. */
     const SUPABASE_URL = 'https://gconhxjifoculzsbztsg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdjb25oeGppZm9jdWx6c2J6dHNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwMjg1NzcsImV4cCI6MjEwMjYwNDU3N30.VEmTDeMLtajIFxmIGut__XjaeiqFr89tOdI4zm1Y1D8';
-    const demo={projects:[{title:'A Living Interface',description:'An exploratory digital product designed around clarity, motion and a sense of discovery.',tags:['Product design','Prototype','2026']},{title:'Signal / Noise',description:'A visual system for finding narrative and rhythm inside complex information.',tags:['Data','Interaction','2025']},{title:'Future Notes',description:'A small experiment in making personal knowledge feel more alive.',tags:['Research','Web','2025']}],experience:[{period:'NOW',role:'Independent creative practice',company:'Designing systems and digital experiences'},{period:'PREVIOUS',role:'Product & creative work',company:'Turning ideas into useful, expressive interfaces'}],skills:['Figma','Creative coding','Product thinking','HTML / CSS','JavaScript','Visual systems','Research','Prototyping']};
     const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-    async function table(name){if(!SUPABASE_ANON_KEY||SUPABASE_ANON_KEY.includes('PASTE_'))return demo[name];try{const r=await fetch(`${SUPABASE_URL}/rest/v1/${name}?select=*&order=sort_order.asc`,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`}});if(!r.ok)throw Error();return await r.json()}catch{return demo[name]}}
-    function renderProjects(items){document.querySelector('#projects').innerHTML=items.map((p,i)=>`<article class="card project ${i===0?'featured':'small'}"><span class="project-arrow">↗</span><div><div class="project-type mono">0${i+1} / ${esc(p.category||'SELECTED WORK')}</div><h3>${esc(p.title||p.name)}</h3><p>${esc(p.description||p.summary||'A considered project in progress.')}</p></div><div class="tags">${(p.tags||p.technologies||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')||'<span class="tag">CASE STUDY</span>'}</div></article>`).join('')}
-    function renderExperience(items){document.querySelector('#experience').innerHTML=items.map(x=>`<div class="experience-item"><div class="experience-date mono">${esc(x.period||x.date||x.year||'—')}</div><div><div class="experience-title">${esc(x.role||x.title||'Experience')}</div><div class="experience-company">${esc(x.company||x.organization||x.description||'')}</div></div></div>`).join('')}
-    function renderSkills(items){document.querySelector('#skills').innerHTML=items.map(x=>`<span class="skill">${esc(typeof x==='string'?x:(x.name||x.skill||x.title))}</span>`).join('')}
+    // No fake fallback data: if the fetch fails for any reason, this returns null
+    // and the render functions below show a real "couldn't load" message instead.
+    async function table(name){
+      try{
+        const r=await fetch(`${SUPABASE_URL}/rest/v1/${name}?select=*&order=sort_order.asc`,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`}});
+        if(!r.ok)throw new Error(`Request for "${name}" failed (${r.status})`);
+        return await r.json();
+      }catch(err){
+        console.error(`Failed to load "${name}":`, err);
+        return null;
+      }
+    }
     // Some Supabase schemas store tags as a comma-separated string; normalize both formats.
-    function renderProjects(items){document.querySelector('#projects').innerHTML=items.map((p,i)=>{const raw=p.tags||p.technologies||[];const tags=Array.isArray(raw)?raw:String(raw).split(',').filter(Boolean);return `<article class="card project ${i===0?'featured':'small'}"><span class="project-arrow">↗</span><div><div class="project-type mono">0${i+1} / ${esc(p.category||'SELECTED WORK')}</div><h3>${esc(p.title||p.name)}</h3><p>${esc(p.description||p.summary||'A considered project in progress.')}</p></div><div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')||'<span class="tag">CASE STUDY</span>'}</div></article>`}).join('')}
-    Promise.all(['projects','experience','skills'].map(table)).then(([p,e,s])=>{renderProjects(p);renderExperience(e);renderSkills(s);document.querySelector('#project-count').textContent=String(p.length).padStart(2,'0');document.querySelector('#skill-count').textContent=String(s.length).padStart(2,'0')});
+    function renderProjects(items){
+      const el=document.querySelector('#projects');
+      if(!items){el.innerHTML=`<div class="empty">Couldn't load projects — try refreshing.</div>`;return;}
+      if(!items.length){el.innerHTML=`<div class="empty">No projects yet.</div>`;return;}
+      el.innerHTML=items.map((p,i)=>{const raw=p.tags||p.technologies||[];const tags=Array.isArray(raw)?raw:String(raw).split(',').filter(Boolean);return `<article class="card project ${i===0?'featured':'small'}"><span class="project-arrow">↗</span><div><div class="project-type mono">0${i+1} / ${esc(p.category||'SELECTED WORK')}</div><h3>${esc(p.title||p.name)}</h3><p>${esc(p.description||p.summary||'A considered project in progress.')}</p></div><div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')||'<span class="tag">CASE STUDY</span>'}</div></article>`}).join('');
+    }
+    function renderExperience(items){
+      const el=document.querySelector('#experience');
+      if(!items){el.innerHTML=`<div class="empty">Couldn't load experience — try refreshing.</div>`;return;}
+      if(!items.length){el.innerHTML=`<div class="empty">No experience yet.</div>`;return;}
+      el.innerHTML=items.map(x=>`<div class="experience-item"><div class="experience-date mono">${esc(x.period||x.date||x.year||'—')}</div><div><div class="experience-title">${esc(x.role||x.title||'Experience')}</div><div class="experience-company">${esc(x.company||x.organization||x.description||'')}</div></div></div>`).join('');
+    }
+    function renderSkills(items){
+      const el=document.querySelector('#skills');
+      if(!items){el.innerHTML=`<div class="empty">Couldn't load skills — try refreshing.</div>`;return;}
+      if(!items.length){el.innerHTML=`<div class="empty">No skills yet.</div>`;return;}
+      el.innerHTML=items.map(x=>`<span class="skill">${esc(typeof x==='string'?x:(x.name||x.skill||x.title))}</span>`).join('');
+    }
+    Promise.all(['projects','experience','skills'].map(table)).then(([p,e,s])=>{
+      renderProjects(p);renderExperience(e);renderSkills(s);
+      document.querySelector('#project-count').textContent=p?String(p.length).padStart(2,'0'):'—';
+      document.querySelector('#skill-count').textContent=s?String(s.length).padStart(2,'0'):'—';
+    });
     const cursor=document.querySelector('#cursor');window.addEventListener('pointermove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});document.querySelectorAll('.magnetic').forEach(el=>el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.18,y=(e.clientY-r.top-r.height/2)*.18;el.style.transform=`translate(${x}px,${y}px)`}),el.addEventListener('pointerleave',()=>el.style.transform=''));
   </script>
 </body>
